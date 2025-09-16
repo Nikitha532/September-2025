@@ -1,0 +1,19 @@
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val: Optional[int] = None, children: Optional[List['Node']] = None):
+        self.val = val
+        self.children = children
+"""
+
+class Solution:
+    def postorder(self, root: 'Node') -> List[int]:
+        def postOrder(root, ans) :
+            if(root == None) :
+                return
+            for child in root.children :
+                postOrder(child, ans)
+            ans.append(root.val)
+        ans = []
+        postOrder(root, ans)
+        return ans
