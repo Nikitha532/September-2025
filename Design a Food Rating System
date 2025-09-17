@@ -1,0 +1,35 @@
+from collections import defaultdict
+from sortedcontainers import SortedList
+
+class FoodRatings:
+
+    def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
+        # cuisine → sorted list of (-rating, foodName)
+        self.cuisine_to_sorted = defaultdict(SortedList)
+        # food name → (rating, cuisine)
+        self.food_info = {}
+        
+        for food, cuisine, rating in zip(foods, cuisines, ratings):
+            self.food_info[food] = (rating, cuisine)
+            # We use negative rating so that higher ratings come first
+            self.cuisine_to_sorted[cuisine].add((-rating, food))
+        
+    def changeRating(self, food: str, newRating: int) -> None:
+        oldRating, cuisine = self.food_info[food]
+        # Remove old entry
+        self.cuisine_to_sorted[cuisine].remove((-oldRating, food))
+        # Insert new entry
+        self.cuisine_to_sorted[cuisine].add((-newRating, food))
+        # Update mapping
+        self.food_info[food] = (newRating, cuisine)
+    
+    def highestRated(self, cuisine: str) -> str:
+        # First element in sorted list is the highest rating
+        negRating, foodName = self.cuisine_to_sorted[cuisine][0]
+        return foodName
+
+
+# Your FoodRatings object will be instantiated and called as such:
+# obj = FoodRatings(foods, cuisines, ratings)
+# obj.changeRating(food,newRating)
+# param_2 = obj.highestRated(cuisine)
