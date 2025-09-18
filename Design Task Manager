@@ -1,0 +1,43 @@
+from typing import List
+from sortedcontainers import SortedList
+
+class TaskManager:
+    def __init__(self, tasks: List[List[int]]):
+        # maps taskId -> (userId, priority)
+        self.task_info = {}
+        # sorted list of keys (-priority, -taskId)
+        self.sorted_tasks = SortedList()
+        
+        for (userId, taskId, priority) in tasks:
+            self.add(userId, taskId, priority)
+            
+    def add(self, userId: int, taskId: int, priority: int) -> None:
+        # Add new task
+        self.task_info[taskId] = (userId, priority)
+        # We negate priority and taskId so that higher priority / higher taskId come first
+        self.sorted_tasks.add( (-priority, -taskId) )
+        
+    def edit(self, taskId: int, newPriority: int) -> None:
+        # Guaranteed taskId exists
+        userId, oldPriority = self.task_info[taskId]
+        # Remove old entry
+        self.sorted_tasks.discard( (-oldPriority, -taskId) )
+        # Update map
+        self.task_info[taskId] = (userId, newPriority)
+        # Insert new
+        self.sorted_tasks.add( (-newPriority, -taskId) )
+        
+    def rmv(self, taskId: int) -> None:
+        # Guaranteed exists
+        userId, priority = self.task_info.pop(taskId)
+        self.sorted_tasks.remove( (-priority, -taskId) )
+        
+    def execTop(self) -> int:
+        if not self.sorted_tasks:
+            return -1
+        # Pop the “smallest” in sortedTasks which corresponds to highest priority, highest taskId
+        neg_priority, neg_taskId = self.sorted_tasks.pop(0)
+        taskId = -neg_taskId
+        userId, _ = self.task_info.pop(taskId)
+        return userId
+Design Task
