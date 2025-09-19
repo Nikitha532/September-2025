@@ -1,0 +1,27 @@
+class Spreadsheet:
+    def __init__(self, rows: int):
+        # We keep a dictionary for sparse storage: only cells set explicitly.
+        self.data = {}
+
+    def setCell(self, cell: str, value: int) -> None:
+        self.data[cell] = value
+
+    def resetCell(self, cell: str) -> None:
+        # Remove cell if present; otherwise do nothing
+        if cell in self.data:
+            del self.data[cell]
+
+    def getValue(self, formula: str) -> int:
+        # formula format always starts with "=" and has two operands with "+"
+        assert formula.startswith("=")
+        expr = formula[1:]
+        left, right = expr.split("+")
+        
+        return self._getOperandValue(left) + self._getOperandValue(right)
+
+    def _getOperandValue(self, token: str) -> int:
+        # If token starts with a digit → number; else → cell ref
+        if token[0].isdigit():
+            return int(token)
+        else:
+            return self.data.get(token, 0)
