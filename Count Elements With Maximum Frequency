@@ -1,0 +1,13 @@
+class Solution:
+    def maxFrequencyElements(self, nums: List[int]) -> int:
+        count = defaultdict(int)
+        maxf = 0
+        for x in nums :
+            count[x] += 1
+            if count[x] > maxf :
+                maxf = count[x] 
+        total = 0
+        for f in count.values() :
+            if f == maxf :
+                total += f
+        return total
