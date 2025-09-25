@@ -1,0 +1,28 @@
+class Solution(object):
+    def decodeString(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        stack1 = []
+        stack2 = []
+        num = 0
+        for i in s :
+            if i.isdigit() :
+                num = num * 10 + int(i)
+            elif i == '[' :
+                stack1.append(num)
+                stack2.append(i)
+                num = 0
+            elif i.isalpha() :
+                stack2.append(i)
+            elif i == ']' :
+                temp = ""
+                while stack2 and stack2[-1] != '[' :
+                    temp = stack2.pop() + temp
+                stack2.pop()
+
+                repeat = stack1.pop()
+                finalstring = temp * repeat
+                stack2.append(finalstring)
+        return "".join(stack2)
