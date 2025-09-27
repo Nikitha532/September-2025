@@ -1,0 +1,25 @@
+class Solution(object):
+    def findMin(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        low = 0
+        high = len(nums) - 1
+        minimum = nums[0]
+        while (low <= high) :
+            mid = (low+high) // 2
+            minimum = min(minimum,nums[mid])
+            if nums[low] == nums[mid] == nums[high] :
+                low = low + 1
+                high = high - 1
+
+            elif nums[low] <= nums[mid] :
+                if nums[low] < minimum :
+                    minimum = nums[low]
+                low = mid + 1
+            elif nums[mid] <= nums[high] :
+                if nums[mid] < minimum :
+                    minimum = nums[mid]
+                high = mid - 1
+        return minimum
