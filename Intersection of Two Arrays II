@@ -1,0 +1,17 @@
+class Solution(object):
+    def intersect(self, nums1, nums2):
+        """
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: List[int]
+        """
+        ans = []
+        nums2_copy = list(nums2)
+        for i in range (len(nums1)) :
+            for j in range (len(nums2_copy)) :
+                if nums1[i] == nums2_copy[j] :
+                    
+                    ans.append(nums1[i])
+                    nums2_copy.pop(j)
+                    break
+        return ans
